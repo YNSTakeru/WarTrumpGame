@@ -19,7 +19,7 @@ class GameManager {
         $this->prepareBeforeStart($playerCount,$input);
         $this->createTrump();
         $this->shuffleTrump();
-        // $this->dealTrump();
+        $this->dealTrump();
     }
 
 
@@ -125,10 +125,11 @@ class GameManager {
 
     public function dealTrump()
     {
+        $trumps = $this->trumps;
         $playerCount = count($this->players);
-        $trumpCount = count($this->trumps);
+        $trumpCount = count($trumps);
         for ($i = 0; $i < $trumpCount; $i++) {
-            $this->players[$i % $playerCount]->setHand($this->trumps[$i]);
+            $this->players[$i % $playerCount]->setHand($trumps[$i]);
         }
     }
 

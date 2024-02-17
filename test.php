@@ -106,6 +106,84 @@ function testShuffle($playerCount=2,$input=false) {
     }
 
     echo 'トランプが正しくシャッフルされています' . PHP_EOL;
+
+    unset($gameManager);
 }
 
 testShuffle(playerCount:2,input:false);
+
+function testDeal($playerCount=2,$input=false) {
+    $gameManager = new GameManager(playerCount:$playerCount,input:$input);
+    $players = $gameManager->getPlayers();
+    $trumps = $gameManager->getTrumps();
+    $trumpCount = count($trumps);
+    $expectedHandCount = (int)($trumpCount / $playerCount);
+    $shouldAddCardPlayerIndex = $trumpCount % $playerCount -1;
+
+    for($i = 0; $i < $playerCount; $i++) {
+        $player = $players[$i];
+        $actualHand = $player->getHand();
+        $actualHandCount = count($actualHand);
+        if($i <= $shouldAddCardPlayerIndex) {
+            assert($actualHandCount === $expectedHandCount + 1, 'プレイヤーにトランプに配られたトランプの枚数が正しくないです');
+        } else {
+            assert($actualHandCount === $expectedHandCount, 'プレイヤーにトランプに配られたトランプの枚数が正しくないです');
+        }
+    }
+
+    echo 'プレイヤーに配れたトランプの枚数は正しいです' . PHP_EOL;
+
+    unset($gameManager);
+}
+
+testDeal();
+
+
+function testLoopDeal(){
+    for($i = 2; $i <= 5; $i++) {
+        testDeal(playerCount:$i);
+    }
+}
+
+testLoopDeal();
+
+function testDealOverlap($playerCount=2,$input=false) {
+    $gameManager = new GameManager(playerCount:$playerCount,input:$input);
+    $players = $gameManager->getPlayers();
+
+    $allHand = [];
+    for($i = 0; $i < $playerCount; $i++) {
+        $player = $players[$i];
+        $actualHand = $player->getHand();
+        $allHand = array_merge($allHand, $actualHand);
+    }
+
+
+    $mark = [];
+    foreach($allHand as $trump){
+        $mark[$trump->getMark()][] = $trump->getNumber();
+    }
+
+    foreach($mark as $value){
+
+        $uniqueHandCount = count(array_unique($value));
+        $actualHandCount = count($value);
+
+        assert($actualHandCount === $uniqueHandCount, '他のプレイヤーに配られたトランプと重複しています');
+    }
+
+    echo '他のプレイヤーに配られたトランプと重複していません' . PHP_EOL;
+
+    unset($gameManager);
+}
+
+testDealOverlap();
+
+
+function testLoopDealOverlap(){
+    for($i = 2; $i <= 5; $i++) {
+        testDealOverlap(playerCount:$i);
+    }
+}
+
+testLoopDealOverlap();
