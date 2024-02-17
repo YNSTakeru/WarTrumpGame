@@ -18,7 +18,7 @@ class GameManager {
     {
         $this->prepareBeforeStart($playerCount,$input);
         $this->createTrump();
-        // $this->shuffleTrump();
+        $this->shuffleTrump();
         // $this->dealTrump();
     }
 

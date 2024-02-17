@@ -15,6 +15,8 @@ function testPlayerCount($playerCount=2, $expectedPlayerCount=2,$input=false) {
 
     assert($actualPlayerCount === $expectedPlayerCount, 'プレイヤーの人数が正しく設定されていません');
     echo 'プレイヤーの人数:'.$playerCount.'が正しく設定されています' . PHP_EOL;
+
+    unset($gameManager);
 }
 
 testPlayerCount(playerCount:2,expectedPlayerCount:2);
@@ -41,6 +43,8 @@ function testPlayerName($playerCount=2,$input=false) {
         assert($actualPlayerName === 'プレイヤー' . ($i + 1), 'プレイヤーの名前が正しく設定されていません');
     }
     echo 'プレイヤーの名前が正しく設定されています' . PHP_EOL;
+
+    unset($gameManager);
 }
 
 testPlayerName(playerCount:2,input:false);
@@ -54,6 +58,8 @@ function testTrumpCount($playerCount=2,$input=false) {
 
     assert($actualTrumpsCount === $expectedTrumpsCount, 'トランプの枚数が正しくありません');
     echo 'トランプの枚数が正しく設定されています' . PHP_EOL;
+
+    unset($gameManager);
 }
 
 testTrumpCount(playerCount:2,input:false);
@@ -67,36 +73,39 @@ function testTrumpMark($playerCount=2,$input=false) {
         assert(in_array($actualMark, Trump::MARKS), 'トランプのマークが正しく設定されていません');
     }
     echo 'トランプのマークが正しく設定されています' . PHP_EOL;
+
+    unset($gameManager);
 }
 
 testTrumpMark(playerCount:2,input:false);
 
-function testTrumpNumber($playerCount=2,$input=false) {
+function testShuffle($playerCount=2,$input=false) {
     $gameManager = new GameManager(playerCount:$playerCount,input:$input);
     $trumps = $gameManager->getTrumps();
 
-    $expectedNumberCount = 13;
-
-    $expectedCardNumber = 1;
-    $EXPECTED_MARKS = ['spade', 'heart', 'diamond', 'club',"joker"];
-    $expectedMarkIndex = 0;
-
-
+    $trumpCount = [];
     foreach($trumps as $trump) {
-        $actualMark = $trump->getMark();
-        if($actualMark === "joker"){
-            assert($trump->getMark() === $EXPECTED_MARKS[$expectedMarkIndex], 'ジョーカーが正しく設定されていません');
-            continue;
-        }
-        $actualNumber = $trump->getNumber();
-        assert($actualNumber === $expectedCardNumber, 'トランプの数字が正しく設定されていません');
-        $expectedCardNumber = $expectedCardNumber % $expectedNumberCount + 1;
-
-        assert($actualMark === $EXPECTED_MARKS[$expectedMarkIndex], 'トランプのマークが正しく設定されていません');
-        if($expectedCardNumber === 1) $expectedMarkIndex++;
+        $mark = $trump->getMark();
+        $number = $trump->getNumber();
+        $trumpCount[$mark][$number] = 0;
     }
 
-    echo 'トランプが正しく設定されています' . PHP_EOL;
+    foreach($trumps as $trump) {
+        $mark = $trump->getMark();
+        if($mark === "joker"){
+            $mark = "joker";
+        }
+        $number = $trump->getNumber();
+        $trumpCount[$mark][$number]++;
+    }
+
+    foreach($trumpCount as $mark => $numbers) {
+        foreach($numbers as $number => $count) {
+            assert($count === 1, 'トランプが正しくシャッフルされていません');
+        }
+    }
+
+    echo 'トランプが正しくシャッフルされています' . PHP_EOL;
 }
 
-testTrumpNumber(playerCount:2,input:false);
+testShuffle(playerCount:2,input:false);
