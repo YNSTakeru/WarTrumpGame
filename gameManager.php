@@ -217,7 +217,7 @@ class GameManager {
     }
 
     private function submitCardToField(){
-        $players = $this->players;
+        $players = $this->candidateWinnerPlayers;
         foreach($players as $player){
             $this->field[] = new FieldCard($player);
         }
@@ -306,6 +306,7 @@ class GameManager {
             }
         }
         if(!$this->isEnd){
+            $this->candidateWinnerPlayers = $this->players;
             return;
         }
         $gameWinner = $this->players[0];
@@ -426,6 +427,7 @@ class GameManager {
 
     public function play()
     {
+        $this->candidateWinnerPlayers = $this->players;
         while(!$this->getIsEnd()){
             echo "戦争!".PHP_EOL;
             $this->submitCardToField();

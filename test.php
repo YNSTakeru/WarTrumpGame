@@ -582,8 +582,8 @@ function getTrumpsDraw(){
 function testAllTrumpPattern($playerCount=2){
     $trumps = getTrumpsDraw();
 
-    $gameManager = new GameManager(playerCount:$playerCount,isInput:false);
+    $gameManager = new GameManager(playerCount:$playerCount,isInput:false,trumps:$trumps);
     $gameManager->play();
 }
 
-testAllTrumpPattern();
+testAllTrumpPattern(playerCount:5);
