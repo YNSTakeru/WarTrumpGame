@@ -155,21 +155,6 @@ class GameManager {
         $this->field = [];
     }
 
-    private function updatePlayers($newPlayers){
-        for($i = 0; $i < count($this->players); $i++){
-            $player = $this->players[$i];
-
-            foreach($newPlayers as $newPlayer){
-                if($player->getId() === $newPlayer->getId())
-                    $player = $newPlayer;
-            }
-            foreach($this->candidateWinnerPlayers as $candidateWinnerPlayer){
-                if($player->getId() === $candidateWinnerPlayer->getId())
-                    $candidateWinnerPlayer = $player;
-            }
-        }
-    }
-
 
     private function canSubmitPlayersHandler($players){
 
@@ -187,7 +172,6 @@ class GameManager {
         if (count($canSubmitPlayers) < 2) {
             $chargedPlayers = $this->getChargedPlayersWhenHand0($needChargeHandPlayers);
             $canSubmitPlayers = array_merge($canSubmitPlayers, $chargedPlayers);
-            $this->updatePlayers($canSubmitPlayers);
         }
 
         $this->canSubmitPlayers = $canSubmitPlayers;
