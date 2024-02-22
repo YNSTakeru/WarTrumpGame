@@ -14,10 +14,6 @@ class GameManager {
 
     private $winner;
     private $isEnd = false;
-    private $result = [];
-    private $resultArray = [];
-    private $resultKey = 0;
-    private $resultValue = 0;
     private $isInput = false;
     private $candidateWinnerPlayers;
     private $canSubmitPlayers;
@@ -99,25 +95,6 @@ class GameManager {
         return $this->isEnd;
     }
 
-    public function getResult()
-    {
-        return $this->result;
-    }
-
-    public function getResultArray()
-    {
-        return $this->resultArray;
-    }
-
-    public function getResultKey()
-    {
-        return $this->resultKey;
-    }
-
-    public function getResultValue()
-    {
-        return $this->resultValue;
-    }
 
     public function createTrump()
     {
