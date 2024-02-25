@@ -376,13 +376,20 @@ class GameManager {
 
 
     private function displayRanking(){
+        $beforePlayer = $this->players[0];
+        $rank = 1;
+
         foreach ($this->players as $key => $player) {
-            $rank = $key + 1;
+            $beforePlayerScore = count($beforePlayer->getDeck())+count($beforePlayer->getHand());
+            $playerScore = count($player->getDeck())+count($player->getHand());
+            if ($beforePlayerScore !== $playerScore)
+                $rank++;
             echo $player->getName()."が".$rank."位";
             if($rank === count($this->players))
                 echo "です。".PHP_EOL;
             else
                 echo "、";
+            $beforePlayer = $player;
         }
     }
 
